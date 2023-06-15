@@ -114,7 +114,8 @@ module.exports = {
                 _id: user._id,
                 email: user.email,
                 firstName: user.firstName,
-                admin: user.admin
+                admin: user.admin,
+                business: user.business
             });
         }
         catch (err) {

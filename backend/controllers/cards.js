@@ -54,13 +54,13 @@ module.exports = {
     }
   },
 
-  myCards: async function (req, res, next) {
-    try {
+   getOneCard: async function (req, res, next) {
+        try {
             const scheme = joi.object({
-                _id: joi.string()
+                _id: joi.string().required(),
             });
 
-            const { error, value } = scheme.validate({ _id: req.params._id });
+            const { error, value } = scheme.validate({ _id: req.params.id });
 
             if (error) {
                 console.log(error.details[0].message);
@@ -68,12 +68,35 @@ module.exports = {
                 return;
             }
 
-            const result = await Card.find({ userId: value._id });
+            const result = await Card.findOne({ _id: value._id });
             res.json(result);
         }
         catch (err) {
             console.log(err);
-            res.status(400).json({ error: "error getting your cards" });
+            res.status(400).json({ error: "error getting the card" });
         }
-  },
+    },
+
+  // myCards: async function (req, res, next) {
+  //   try {
+  //           const scheme = joi.object({
+  //               _id: joi.string()
+  //           });
+
+  //           const { error, value } = scheme.validate({ _id: req.params._id });
+
+  //           if (error) {
+  //               console.log(error.details[0].message);
+  //               res.status(400).json({ error: "invalid data" });
+  //               return;
+  //           }
+
+  //           const result = await Card.find({ userId: value._id });
+  //           res.json(result);
+  //       }
+  //       catch (err) {
+  //           console.log(err);
+  //           res.status(400).json({ error: "error getting your cards" });
+  //       }
+  // },
 };
