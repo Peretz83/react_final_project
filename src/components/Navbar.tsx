@@ -1,12 +1,17 @@
 import { NavLink } from "react-router-dom";
-import './navbar.css'
+import "./navbar.css";
+import Logout from "./Logout";
+import { verifyToken } from "../auth/TokenManager";
+import { useContext } from "react";
+import { AppContext } from "../App";
 
 const Navbar = () => {
+  const context = useContext(AppContext);
   return (
     <div className="navCont">
       <nav className="navbar navbar-expand-lg  myNavbar">
         <div className="container-fluid">
-          <NavLink className="navbar-brand"to='/'>
+          <NavLink className="navbar-brand" to="/">
             BCard
           </NavLink>
           <button
@@ -23,26 +28,41 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/about'>
+                <NavLink className="nav-link " aria-current="page" to="/about">
                   ABOUT
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/favorites'>
-                  MY FAVORITES
-                </NavLink>
+                {verifyToken() && (
+                  <>
+                    <NavLink
+                      className="nav-link "
+                      aria-current="page"
+                      to="/favorites"
+                    >
+                      MY FAVORITES
+                    </NavLink>
+                  </>
+                )}
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/mycards'>
+                <NavLink
+                  className="nav-link "
+                  aria-current="page"
+                  to="/mycards"
+                >
                   MY CARDS
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/sandbox'>
+                <NavLink
+                  className="nav-link "
+                  aria-current="page"
+                  to="/sandbox"
+                >
                   SANDBOX
                 </NavLink>
               </li>
-              
             </ul>
             <form className="d-flex" role="search">
               <input
@@ -54,20 +74,37 @@ const Navbar = () => {
               <button className="btn btn-primary border me-4" type="submit">
                 Search
               </button>
-               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/signup'>
-                  SIGNUP
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to='/login'>
-                  LOGIN
-                </NavLink>
-              </li>
-              
-              
-            </ul>
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {verifyToken() && (
+                  <>
+                    <li className="nav-item">
+                      <Logout />
+                    </li>
+                  </>
+                )}
+                {!verifyToken() && (
+                  <>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link "
+                        aria-current="page"
+                        to="/signup"
+                      >
+                        SIGNUP
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link "
+                        aria-current="page"
+                        to="/login"
+                      >
+                        LOGIN
+                      </NavLink>
+                    </li>
+                  </>
+                )}
+              </ul>
             </form>
           </div>
         </div>

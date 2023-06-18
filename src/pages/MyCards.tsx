@@ -1,11 +1,19 @@
-import React from 'react'
 
-type Props = {}
+import Title from "../components/Title";
 
-const MyCards = (props: Props) => {
+
+
+const MyCard = () => {
+  
+
+
   return (
-    <div>MyCards</div>
-  )
-}
+    <>
+      <Title mainText="MY CARDS" />
+     
+      
+    </>
+  );
+};
 
-export default MyCards
+export default MyCard;
