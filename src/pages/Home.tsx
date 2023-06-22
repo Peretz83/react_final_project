@@ -18,10 +18,15 @@ const Home = () => {
     <div className="min-vw-100 min-vh-100 py-4 signupWrap">
       <Title mainText="Home Page" />
 
-      <div className="d-flex">
+      <div className="d-flex justify-content-center flex-wrap">
+        {
+          cards.length === 0 && <div className=" w-100 text-center">No businesses to display........</div>
+        }
         {cards.map((card) => (
-          <BusinessCards key={card._id} {...card} />
+          <BusinessCards key={card._id} {...card} cardId={card._id} />
+
         ))}
+
       </div>
     </div>
   );

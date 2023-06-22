@@ -45,7 +45,9 @@ const Navbar = () => {
                   </>
                 )}
               </li>
-              <li className="nav-item">
+              {verifyToken() && (
+
+<li className="nav-item">
                 <NavLink
                   className="nav-link "
                   aria-current="page"
@@ -54,7 +56,9 @@ const Navbar = () => {
                   MY CARDS
                 </NavLink>
               </li>
-              <li className="nav-item">
+              )}
+              {context?.admin && (
+ <li className="nav-item">
                 <NavLink
                   className="nav-link "
                   aria-current="page"
@@ -63,6 +67,8 @@ const Navbar = () => {
                   SANDBOX
                 </NavLink>
               </li>
+              )}
+             
             </ul>
             <form className="d-flex" role="search">
               <input

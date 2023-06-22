@@ -25,6 +25,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 app.use('/events', eventsRouter);
+require('./utils/initialize')
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

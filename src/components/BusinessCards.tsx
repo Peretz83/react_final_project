@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 export interface CardProps {
@@ -43,28 +44,36 @@ const BusinessCards = ({
 }:CardProps) => {
 
 
-
+function callNumber(number: any) {
+    window.location.href = `tel:${phone}`;
+  }
   
   return (
  <>
+<Link to={`/details/${cardId}`}>
+<div key={_id} className="card m-4 bg-light" style={{width: '18rem',}}>
+ 
+  <img style={{height: '200px'}} src={imageUrl} className="card-img-top min-h-25" alt={imageAlt}/>
 
-<div key={_id} className="card m-4" style={{width: '18rem'}}>
-  <img src={imageUrl} className="card-img-top" alt={imageAlt}/>
   <div className="card-body">
     <h5 className="card-title">{title}</h5>
     <p className="card-text">{subtitle}</p>
   </div>
-  <ul className="list-group list-group-flush">
-    <li className="list-group-item">{description}</li>
-    <li className="list-group-item">Phone: {phone}</li>
+  <ul className="list-group list-group-flush ">
+    <li className="list-group-item bg-light">{description}</li>
+    <li className="list-group-item bg-light">Phone: {phone}</li>
     
   </ul>
   <div className="card-body d-flex justify-content-around align-items-end">
+    <button onClick={callNumber} className="btn bt-light">
     <i className="bi bi-telephone"/>
+    </button>
+    <button className="btn bt-light">
    <i className="bi bi-heart-fill"/>
+   </button>
   </div>
 </div>
-
+</Link>
 
 
 
