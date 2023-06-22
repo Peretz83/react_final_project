@@ -50,9 +50,9 @@ function callNumber(number: any) {
   
   return (
  <>
-<Link to={`/details/${cardId}`}>
+
 <div key={_id} className="card m-4 bg-light" style={{width: '18rem',}}>
- 
+ <Link to={`/details/${cardId}`}>
   <img style={{height: '200px'}} src={imageUrl} className="card-img-top min-h-25" alt={imageAlt}/>
 
   <div className="card-body">
@@ -64,6 +64,7 @@ function callNumber(number: any) {
     <li className="list-group-item bg-light">Phone: {phone}</li>
     
   </ul>
+  </Link>
   <div className="card-body d-flex justify-content-around align-items-end">
     <button onClick={callNumber} className="btn bt-light">
     <i className="bi bi-telephone"/>
@@ -71,9 +72,16 @@ function callNumber(number: any) {
     <button className="btn bt-light">
    <i className="bi bi-heart-fill"/>
    </button>
+   {}
+    <button className="btn bt-light">
+   <i className="bi bi-pen"/>
+   </button>
+    <button className="btn bt-light">
+   <i className="bi bi-trash2"/>
+   </button>
   </div>
 </div>
-</Link>
+
 
 
 

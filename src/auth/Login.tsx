@@ -4,7 +4,7 @@ import FormLayout from "../components/FormLayout";
 import Title from "../components/Title";
 import { toast } from "react-toastify";
 import { login } from "../services/apiServices";
-import { setAdmin, setToken } from "./TokenManager";
+import { setAdmin, setToken, setUser } from "./TokenManager";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
@@ -48,6 +48,8 @@ const Login = (props: Props) => {
       } else {
          setToken(user.token);
          setAdmin(JSON.stringify(user.admin))
+         const {firstName, email, admin, _id, business} = user
+         setUser({firstName, email, admin, _id, business})
         toast.success(`Welcome ${user.firstName}`);
         navigate("/");
         if (context) {

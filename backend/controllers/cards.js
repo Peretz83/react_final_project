@@ -77,26 +77,26 @@ module.exports = {
         }
     },
 
-  // myCards: async function (req, res, next) {
-  //   try {
-  //           const scheme = joi.object({
-  //               _id: joi.string()
-  //           });
+  myCards: async function (req, res, next) {
+    try {
+            const scheme = joi.object({
+                _id: joi.string()
+            });
 
-  //           const { error, value } = scheme.validate({ _id: req.params._id });
+            const { error, value } = scheme.validate({ _id: req.params._id });
 
-  //           if (error) {
-  //               console.log(error.details[0].message);
-  //               res.status(400).json({ error: "invalid data" });
-  //               return;
-  //           }
+            if (error) {
+                console.log(error.details[0].message);
+                res.status(400).json({ error: "invalid data" });
+                return;
+            }
 
-  //           const result = await Card.find({ userId: value._id });
-  //           res.json(result);
-  //       }
-  //       catch (err) {
-  //           console.log(err);
-  //           res.status(400).json({ error: "error getting your cards" });
-  //       }
-  // },
+            const result = await Card.find({ userId: value._id });
+            res.json(result);
+        }
+        catch (err) {
+            console.log(err);
+            res.status(400).json({ error: "error getting your cards" });
+        }
+  },
 };

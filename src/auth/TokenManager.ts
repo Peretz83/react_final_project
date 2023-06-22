@@ -1,5 +1,8 @@
+import { User } from "../interfaces/UserType";
+
 const tokenKey = "token"
 const adminKey = "admin"
+const userKey = "user"
 
 export function setToken(tokenValue?: string) {
     if (!tokenValue) return;
@@ -29,4 +32,22 @@ export function getAdmin() {
 
 export function verifyAdmin(): boolean {
    return getAdmin().length === 4
+}
+
+export function setUser(user: User){
+    if(!user) return
+    const stringifyUser = JSON.stringify(user)
+    localStorage.setItem(userKey, stringifyUser)
+}
+
+export function getUser(): User{
+    const user = localStorage.getItem(userKey)
+    if(!user) return {}
+    const parsedUser = JSON.parse(user)
+    return parsedUser
+}
+
+export function getBusiness() {
+   return localStorage.getItem('user') || ""
+  
 }
