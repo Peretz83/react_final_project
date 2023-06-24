@@ -15,6 +15,9 @@ import { ToastContainer } from "react-toastify";
 import AddCard from "./pages/AddCard";
 import Footer from "./components/Footer";
 import CardDetails from "./pages/CardDetails";
+import EditCard from "./pages/EditCard";
+import EditUser from "./pages/EditUser";
+import { getUser } from "./auth/TokenManager";
 
 export interface UserContext {
   userName: string;
@@ -27,9 +30,13 @@ export interface UserContext {
 
 export const AppContext = createContext<UserContext | null>(null);
 
+const userData = getUser()
+
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(
+    userData ? userData.firstName : 'user'
+  );
   const [admin, setAdmin] = useState(false);
   const [user, setUser] = useState();
 
@@ -67,7 +74,9 @@ function App() {
                 )}
               </button>
             </div>
-            <ToastContainer position="bottom-right" theme="dark" />
+
+            <ToastContainer position="top-right" theme="dark" />
+
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="about" element={<About />} />
@@ -78,6 +87,8 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="addCard" element={<AddCard />} />
               <Route path="details/:id" element={<CardDetails />} />
+              <Route path="editcard/:id" element={<EditCard />} />
+              <Route path="edituser/:id" element={<EditUser />} />
             </Routes>
             <Footer/>
           </div>

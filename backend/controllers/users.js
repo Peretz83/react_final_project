@@ -10,6 +10,16 @@ const config = require('../config/dev');
 
 
 module.exports = {
+    allUsers: async function (req, res, next) {
+    try {
+      const result = await User.find();
+      res.json(result);
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: "error getting users" });
+    }
+  },
   signup: async function (req, res, next) {
         const schema = joi.object({
             admin: joi.boolean(),
@@ -128,6 +138,29 @@ module.exports = {
             res.status(400).json({ error: 'Log in details do not match'  });
         }
     },
+    delete: async function (req, res, next) {
+    try {
+      const scheme = joi.object({
+        _id: joi.string().required(),
+      });
+
+      const { error, value } = scheme.validate({ _id: req.params.id });
+
+      if (error) {
+        console.log(error.details[0].message);
+        res.status(400).json({ error: "invalid data" });
+        return;
+      }
+
+      const deleted = await User.findOne({ _id: value._id });
+
+      await User.deleteOne(value).exec();
+      res.json(deleted);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: "error delete vacation" });
+    }
+  },
 
     
 }

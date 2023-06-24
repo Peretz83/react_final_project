@@ -1,71 +1,89 @@
-import FormLayout from "../components/FormLayout";
+import React, { useEffect, useState } from "react";
 import Title from "../components/Title";
-import "./signup.css";
-import { useInputText } from "../hooks/useInputText";
-import { FormEvent, useRef, useState } from "react";
-import { signup } from "../services/apiServices";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-type Props = {};
+import { Card } from "../interfaces/CardType";
+import { editCards, getCardById } from "../services/apiServices";
+import FormLayout from "../components/FormLayout";
 
-const Signup = (props: Props) => {
-  const navigate = useNavigate();
-  const firstNameProp = useInputText("");
-  const middleNameProp = useInputText("");
-  const lastNameProp = useInputText("");
-  const phoneProp = useInputText("");
-  const emailProp = useInputText("");
-  const passwordProp = useInputText("");
-  const imageUrlProp = useInputText("");
-  const imageAltProp = useInputText("");
-  const stateProp = useInputText("");
-  const countryProp = useInputText("");
-  const cityProp = useInputText("");
-  const streetProp = useInputText("");
-  const houseNumberProp = useInputText("");
-  const zipProp = useInputText("");
-  const [business, setBusiness] = useState(false);
 
-  
+const EditCard = () => {
+  const { id } = useParams();
+   const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [web, setWeb] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageAlt, setImageAlt] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [zip, setZip] = useState("");
 
-  function validate(): boolean {
-    if (!firstNameProp.value || firstNameProp.value.length < 2) {
-      toast.error("First name is required.");
+  useEffect(() => {
+    if (!id) return;
 
+    getCardById(id as string).then((json) => {
+
+      setTitle(json.title as string);
+      setSubtitle(json.subtitle as string);
+      setDescription(json.description as string);
+      setPhone(json.phone as string);
+      setEmail(json.email as string);
+      setWeb(json.web as string);
+      setImageUrl(json.imageUrl as string);
+      setImageAlt(json.imageAlt as string);
+      setState(json.state as string);
+      setCountry(json.country as string);
+      setCity(json.city as string);
+      setStreet(json.street as string);
+      setHouseNumber(json.houseNumber as string);
+      setZip(json.zip as string);
+    });
+  }, [id]);
+
+   function validate(): boolean {
+    if (!title || title.length < 2) {
+      toast.error("Title is required.");
       return false;
     }
-    if (!lastNameProp.value || lastNameProp.value.length < 2) {
-      toast.error("Last name is required.");
+    if (!subtitle || subtitle.length < 2) {
+      toast.error("Subtitle is required.");
       return false;
     }
-    if (!phoneProp.value || phoneProp.value.length < 8) {
+    if (!description || description.length < 5) {
+      toast.error("Description is required.");
+      return false;
+    }
+    if (!phone || phone.length < 10) {
       toast.error("A valid phone number is required.");
       return false;
     }
 
-    const emailRe = /[a-z0-9\._%+!$&*=^|~#%'`?{}/\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,16})/;
-    if (!emailRe.test(emailProp.value)) {
+    // eslint-disable-next-line no-useless-escape
+    const emailRe =/[a-z0-9\._%+!$&*=^|~#%'`?{}/\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,16})/;
+    if (!emailRe.test(email)) {
       toast.error("A valid email address is required.");
       return false;
     }
-
-    if (!passwordProp.value || passwordProp.value.length < 8) {
-      toast.error("Password must contain at least 8 characters.");
-      return false;
-    }
-    if (!countryProp.value) {
+    if (!country) {
       toast.error("Please select a country.");
       return false;
     }
-    if (!cityProp.value) {
+    if (!city) {
       toast.error("Please select a city.");
       return false;
     }
-    if (!streetProp.value) {
+    if (!street) {
       toast.error("Street name is required.");
       return false;
     }
-    if (!houseNumberProp.value) {
+    if (!houseNumber) {
       toast.error("House number is required.");
       return false;
     }
@@ -73,67 +91,68 @@ const Signup = (props: Props) => {
     return true;
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    if (!validate()) return;
+  function handleSubmit() {
+//  if (!validate()) {
+//       return;
+//     }
+    if (!id) return;
 
-    signup({
-      firstName: firstNameProp.value,
-      middleName: middleNameProp.value,
-      lastName: lastNameProp.value,
-      phone: phoneProp.value,
-      email: emailProp.value,
-      password: passwordProp.value,
-      imageUrl: imageUrlProp.value,
-      imageAlt: imageAltProp.value,
-      state: stateProp.value,
-      country: countryProp.value,
-      city: cityProp.value,
-      street: streetProp.value,
-      houseNumber: houseNumberProp.value,
-      zip: zipProp.value,
-      business,
-    }).then((newUser) => {
-      console.log(newUser);
-      if (newUser.error) {
-        toast.error(newUser.error);
-      } else {
-        toast.success(`Thank you ${newUser.firstName} for registering!`);
-        navigate("/login");
-      }
+    editCards(id, {
+      title : title,
+      subtitle,
+      description,
+      phone,
+      email,
+      web,
+      imageUrl,
+      imageAlt,
+      state,
+      country,
+      city,
+      street,
+      houseNumber,
+      zip,
+    }).then((json) => {
+      navigate("/mycards");
+      toast.success('Card edited successfully.')
     });
   }
 
+
+    
   return (
     <>
       <div className="min-vw-100 min-vh-100 py-4 signupWrap">
-        <Title mainText="SIGN UP" />
+        <Title mainText="Edit a card" />
         <FormLayout>
-          <form onSubmit={handleSubmit}>
+        
             <div className="d-flex ">
+
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...firstNameProp}
+               value={title}
+               onChange={(e)=> setTitle(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
               
-                  placeholder="First name"
+                  placeholder="Title"
                 />
                 <label htmlFor="floatingInput">
-                  <span className="input-text text-dark">First name:</span>
+                  <span className="input-text text-dark">Title:</span>
                 </label>
               </div>
 
               <div className="form-floating mb-3 w-50">
                 <input
-                  {...middleNameProp}
+                value={subtitle}
+               onChange={(e)=> setSubtitle(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                  
-                  placeholder="Middle name"
+                  placeholder="Subtitle"
                 />
                 <label htmlFor="floatingInput">
-                  <span className="input-text text-dark">Middle name:</span>
+                  <span className="input-text text-dark">Subtitle:</span>
                 </label>
               </div>
             </div>
@@ -141,20 +160,22 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...lastNameProp}
+               value={description}
+               onChange={(e)=> setDescription(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
               
-                  placeholder="Last name"
+                  placeholder="Description"
                 />
                 <label htmlFor="floatingInput">
-                  <span className="input-text text-dark">Last name:</span>
+                  <span className="input-text text-dark">Description:</span>
                 </label>
               </div>
 
               <div className="form-floating mb-3 w-50">
                 <input
-                  {...phoneProp}
+                 value={phone}
+               onChange={(e)=> setPhone(e.target.value)}
                   type="tel"
                   className="form-control bg-light rounded-1"
                  
@@ -168,7 +189,8 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...emailProp}
+                 value={email}
+               onChange={(e)=> setEmail(e.target.value)}
                   type="email"
                   className="form-control bg-light rounded-1"
                
@@ -181,14 +203,15 @@ const Signup = (props: Props) => {
 
               <div className="form-floating mb-3  w-50">
                 <input
-                  {...passwordProp}
-                  type="password"
+                 value={web}
+               onChange={(e)=> setWeb(e.target.value)}
+                  type="text"
                   className="form-control bg-light rounded-1"
                 
-                  placeholder="Password"
+                  placeholder="Website"
                 />
                 <label htmlFor="floatingInput">
-                  <span className="input-text text-dark">Password:</span>
+                  <span className="input-text text-dark">Website:</span>
                 </label>
               </div>
             </div>
@@ -196,7 +219,8 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...imageUrlProp}
+                value={imageUrl}
+               onChange={(e)=> setImageUrl(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                  
@@ -209,7 +233,8 @@ const Signup = (props: Props) => {
 
               <div className="form-floating mb-3  w-50">
                 <input
-                  {...imageAltProp}
+              value={imageAlt}
+               onChange={(e)=> setImageAlt(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                  
@@ -223,7 +248,8 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...stateProp}
+                 value={state}
+               onChange={(e)=> setState(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                
@@ -237,7 +263,8 @@ const Signup = (props: Props) => {
               <div className="form-floating mb-3  w-50">
                 <input
                   type="text"
-                  {...countryProp}
+                  value={country}
+               onChange={(e)=> setCountry(e.target.value)}
                   className="form-control bg-light rounded-1"
                
                   placeholder="Country"
@@ -250,7 +277,8 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...cityProp}
+                 value={city}
+               onChange={(e)=> setCity(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                 
@@ -263,7 +291,8 @@ const Signup = (props: Props) => {
 
               <div className="form-floating mb-3  w-50">
                 <input
-                  {...streetProp}
+                 value={street}
+               onChange={(e)=> setStreet(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                 
@@ -277,7 +306,8 @@ const Signup = (props: Props) => {
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">
                 <input
-                  {...houseNumberProp}
+                 value={houseNumber}
+               onChange={(e)=> setHouseNumber(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                 
@@ -290,7 +320,8 @@ const Signup = (props: Props) => {
 
               <div className="form-floating mb-3  w-50">
                 <input
-                  {...zipProp}
+                value={zip}
+               onChange={(e)=> setZip(e.target.value)}
                   type="text"
                   className="form-control bg-light rounded-1"
                 
@@ -301,32 +332,28 @@ const Signup = (props: Props) => {
                 </label>
               </div>
             </div>
-            <div className=" mb-3 form-check">
-              <input
-                type="checkbox"
-                checked={business}
-                onChange={() => setBusiness(!business)}
-                className="form-check-input rounded-1"
-               
-              />
-              <label className="form-check-label">
-                Sign up as a bussiness:
-              </label>
-            </div>
 
             <button
-              
-              className="w-100 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
+              onClick={handleSubmit}
+              className="w-50 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
               type="submit"
             >
-              SIGN UP
+              Edit
             </button>
-          </form>
-          <div className="text-center">Have an account? <Link to='/login'>Login here</Link></div>
+            <Link to='/mycards'>
+            <button
+              
+              className="w-50 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
+              type="submit"
+            >
+              Cancel
+            </button>
+            </Link>
+       
         </FormLayout>
       </div>
     </>
   );
 };
 
-export default Signup;
+export default EditCard;

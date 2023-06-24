@@ -7,6 +7,11 @@ const serverUrl = 'http://localhost:3000/'
 const usersUrl = `${serverUrl}users/`
 const cardsUrl = `${serverUrl}cards/`;
 
+export async function getUsers(): Promise<Array<User>> {
+  const res = await fetch(`${usersUrl}`);
+  return res.json();
+}
+
 export async function signup(user: User): Promise<User> {
   const res = await fetch(`${usersUrl}signup`, {
     method: "POST",
@@ -26,6 +31,16 @@ export async function login(user: User): Promise<User> {
     },
     body: JSON.stringify(user),
   })
+  return res.json();
+}
+
+export async function deleteUser(_id: string): Promise<User> {
+  const res = await fetch(`${usersUrl}${_id}`, {
+    method: "DELETE",
+    headers: {
+      // 'x-auth-token': getToken()
+    },
+  });
   return res.json();
 }
 
@@ -80,7 +95,7 @@ export async function deleteCard(_id: string): Promise<Card> {
   const res = await fetch(`${cardsUrl}${_id}`, {
     method: "DELETE",
     headers: {
-      'x-auth-token': getToken()
+      // 'x-auth-token': getToken()
     },
   });
   return res.json();

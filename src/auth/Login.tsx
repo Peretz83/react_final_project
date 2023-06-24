@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import { toast } from "react-toastify";
 import { login } from "../services/apiServices";
 import { setAdmin, setToken, setUser } from "./TokenManager";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
 type Props = {};
@@ -46,10 +46,9 @@ const Login = (props: Props) => {
       if (user.error) {
         toast.error(user.error);
       } else {
+        setUser(user)
          setToken(user.token);
          setAdmin(JSON.stringify(user.admin))
-         const {firstName, email, admin, _id, business} = user
-         setUser({firstName, email, admin, _id, business})
         toast.success(`Welcome ${user.firstName}`);
         navigate("/");
         if (context) {
@@ -102,6 +101,7 @@ const Login = (props: Props) => {
               LOGIN
             </button>
           </div>
+           <div className="text-center">Don't have an account? <Link to='/signup'>Sign-up here</Link></div>
         </FormLayout>
       </div>
     </>

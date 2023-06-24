@@ -4,7 +4,7 @@ import FormLayout from '../components/FormLayout'
 import { useInputText } from '../hooks/useInputText'
 import { toast } from 'react-toastify'
 import { addCard } from '../services/apiServices'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../App'
 
 type Props = {}
@@ -310,11 +310,20 @@ toast.success('Card added successfully.')
 
             <button
               
-              className="w-100 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
+              className="w-50 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
               type="submit"
             >
               Add card
             </button>
+             <Link to='/mycards'>
+            <button
+              
+              className="w-50 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
+              type="submit"
+            >
+              Cancel
+            </button>
+            </Link>
           </form>
         </FormLayout>
       </div>

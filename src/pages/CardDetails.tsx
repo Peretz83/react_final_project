@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getCardById } from '../services/apiServices'
 import { Card } from '../interfaces/CardType'
 
@@ -53,6 +53,12 @@ setCard(json)
  
 
 </div>
+</div>
+
+<div style={{position: 'fixed', right: '5%', bottom: '20%'}}>
+  <Link to='/'>
+  <button className='btn btn-primary'>Back to home</button>
+  </Link>
 </div>
 </div>
 

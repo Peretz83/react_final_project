@@ -34,17 +34,25 @@ export function verifyAdmin(): boolean {
    return getAdmin().length === 4
 }
 
-export function setUser(user: User){
-    if(!user) return
-    const stringifyUser = JSON.stringify(user)
+export function setUser(user: User | null){
+    if(user) {
+ const stringifyUser = JSON.stringify(user)
     localStorage.setItem(userKey, stringifyUser)
+    }
+   
 }
 
-export function getUser(): User{
+export function getUser(){
     const user = localStorage.getItem(userKey)
-    if(!user) return {}
+    if(user) {
     const parsedUser = JSON.parse(user)
     return parsedUser
+    }
+
+}
+
+export function removeUser(){
+    localStorage.removeItem(userKey)
 }
 
 export function getBusiness() {

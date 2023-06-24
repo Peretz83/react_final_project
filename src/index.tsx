@@ -6,13 +6,19 @@ import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "react-toastify/dist/ReactToastify.min.css";
 import { BrowserRouter } from "react-router-dom";
+import { SearchProvider } from './hooks/SearContext'
+
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <SearchProvider>
+
       <App />
+      </SearchProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

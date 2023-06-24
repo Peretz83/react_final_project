@@ -1,30 +1,16 @@
-import { Link } from "react-router-dom";
+import React, { useContext } from 'react'
+import { CardProps } from './BusinessCards'
+import { Link } from 'react-router-dom'
+import { getUser } from '../auth/TokenManager'
+import { CardContext } from '../pages/MyCards'
 
+interface Props extends CardProps {
 
-export interface CardProps {
-  _id?: string;
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  phone?: string;
-  email?: string;
-  web?: string;
-  imageUrl?: string;
-  imageAlt?: string;
-  state?: string;
-  country?: string;
-  city?: string;
-  street?: string;
-  houseNumber?: string;
-  zip?: string;
-  timestamps?: string;
-  cardId?: string
 }
 
+const user = getUser()
 
-
-const BusinessCards = ({
-  _id,
+const MyBusinessCards = ({ _id,
   title,
   subtitle,
   description,
@@ -40,16 +26,20 @@ const BusinessCards = ({
   houseNumber,
   zip,
   timestamps,
-  cardId
-}:CardProps) => {
+  cardId}: Props) => {
+      const context = useContext(CardContext);
 
-
-function callNumber(number: any) {
+    function callNumber(number: any) {
     window.location.href = `tel:${phone}`;
   }
+
+  function handleDelete(id: string){
+    context?.onDelete(id)
+  }
   
+
   return (
- <>
+   <>
 
 <div key={_id} className="card m-4 bg-light" style={{width: '18rem',}}>
  <Link to={`/details/${cardId}`}>
@@ -72,7 +62,14 @@ function callNumber(number: any) {
     <button className="btn bt-light">
    <i className="bi bi-heart-fill"/>
    </button>
-   
+   <Link to={`/editcard/${cardId}`}>
+    <button className="btn bt-light">
+   <i className="bi bi-pen"/>
+   </button>
+   </Link>
+    <button onClick={()=>handleDelete(cardId as string)} className="btn bt-light">
+   <i className="bi bi-trash2"/>
+   </button>
   </div>
 </div>
 
@@ -85,4 +82,4 @@ function callNumber(number: any) {
   )
 }
 
-export default BusinessCards
+export default MyBusinessCards

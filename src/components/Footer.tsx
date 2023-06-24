@@ -7,16 +7,19 @@ const Footer = () => {
       
       <div className=" d-flex justify-content-between align-items-center w-50">
       <div>
-        <i className="bi bi-info-circle"/>
+        <i className="bi bi-info-circle text-primary"/>
+      </div>
+      <div>
+        <i  className="bi bi-heart text-primary"/>
       </div>
       
       <div>
-        <i className="bi bi-briefcase"/>
+        <i className="bi bi-briefcase text-primary"/>
       </div>
       {verifyAdmin() && (
 <>
 <div>
-       <i className="bi bi-shield-check"/>
+       <i className="bi bi-shield-check text-primary"/>
       </div>
 </>
 
