@@ -118,8 +118,21 @@ module.exports = {
         try {
             const user = await User.findOne({ email: value.email });
             if (!user) throw Error;
+
+            if(user.loginAttempts >=3){
+              user.isBlocked = true
+              await user.save()
+            }
+
+            if(user.isBlocked === true){
+              throw "Account blocked."
+            }
+
             const validPassword = await bcrypt.compare(value.password, user.password);
             if (!validPassword) throw 'Invalid password';
+
+              user.loginAttempts = 0
+              await user.save()
 
             const param = { email: value.email };
             const token = jwt.sign(param, config.jwt_token, { expiresIn: '72800s' });
@@ -134,8 +147,19 @@ module.exports = {
             });
         }
         catch (err) {
-            console.log(err.message);
-            res.status(400).json({ error: 'Log in details do not match'  });
+
+          const user = await User.findOne({email: req.body.email})
+
+          if (user == null){
+            res.status(400).json({error: 'User doesnt exist'})
+          }
+
+          if(user){
+            user.loginAttempts +=1
+            await user.save()
+            res.status(400).json({error: "Login detials do not match", err})
+          }
+         
         }
     },
     delete: async function (req, res, next) {

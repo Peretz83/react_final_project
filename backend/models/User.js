@@ -74,6 +74,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    loginAttempts: {
+      type: Number,
+      default: 0
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

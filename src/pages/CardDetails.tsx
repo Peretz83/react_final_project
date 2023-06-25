@@ -19,7 +19,7 @@ setCard(json)
   return (
 <>
 <div className="min-vw-100 min-vh-100 py-4 ">
-<Title mainText='Business details' subText='About'/>
+<Title mainText='Business details'/>
 
 <div style={{marginBottom: 200}} className='w-50 m-auto'>
   <div>

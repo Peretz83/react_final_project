@@ -65,8 +65,8 @@ function App() {
             <Navbar />
 
             <div className="modeWrap">
-              <label htmlFor="">Mode:</label>
-              <button className="btn btn-light ms-3" onClick={handleModeClick}>
+              <label htmlFor="">MODE:</label>
+              <button className="btn btn-primary ms-3" onClick={handleModeClick}>
                 {theme.palette.mode === "dark" ? (
                   <i className="bi bi-sun" />
                 ) : (

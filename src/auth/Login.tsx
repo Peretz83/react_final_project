@@ -42,9 +42,11 @@ const Login = (props: Props) => {
       password: passwordProp.value,
     }).then((user) => {
      
-
+if(user.err){
+  toast.error(user.err)
+}
       if (user.error) {
-        toast.error(user.error);
+        // toast.error(user.error);
       } else {
         setUser(user)
          setToken(user.token);

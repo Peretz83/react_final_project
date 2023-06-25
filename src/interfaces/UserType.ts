@@ -20,4 +20,5 @@ export interface User {
   error?: string
   message?: string
   token?: string
+  err?: string
 }
