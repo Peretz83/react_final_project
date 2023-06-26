@@ -26,6 +26,8 @@ export interface UserContext {
   setAdmin: Function
   user:any
   setUser: Function
+  business: string
+  setBusiness: Function
 }
 
 export const AppContext = createContext<UserContext | null>(null);
@@ -37,7 +39,8 @@ function App() {
   const [userName, setUserName] = useState(
     userData ? userData.firstName : 'user'
   );
-  const [admin, setAdmin] = useState(false);
+  const [business, setBusiness] = useState(userData?userData.business: false)
+  const [admin, setAdmin] = useState(userData? userData.admin: false);
   const [user, setUser] = useState();
 
   const theme = useMemo(
@@ -59,7 +62,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppContext.Provider value={{ userName, setUserName, admin, setAdmin, user, setUser }}>
+        <AppContext.Provider value={{ userName, setUserName, admin, setAdmin, user, setUser, business, setBusiness }}>
          
           <div className="app">
             <Navbar />

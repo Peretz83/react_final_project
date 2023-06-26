@@ -10,6 +10,10 @@ const About = (props: Props) => {
  <div style={{marginBottom: 200}} className="min-vw-100 min-vh-100 py-4 signupWrap">
  <Title mainText='About us'/>
 
+ <div className='my-4' style={{display: 'flex', justifyContent: 'center'}}>
+  <img style={{width: 300,borderRadius:'5px'}} src="https://bcardextra.com/assets/images/products/45/bcardextra-digital-order-02.jpg" alt="bcard-logo" />
+ </div>
+
 <h1 style={{textAlign: 'center'}}>Welcome to Bcard!</h1>
  <h3 style={{width: '70%', margin: 'auto'}}>At Bcard, we believe in the power of connection and the potential of every individual. We've created a platform that allows users to effortlessly create and showcase their own unique business cards, helping them promote their skills, services, and businesses to a wider audience.</h3>
 
@@ -18,7 +22,7 @@ const About = (props: Props) => {
 
  <h2 style={{textAlign: 'center', marginTop: 50}}>Why Choose Bcard:</h2>
  <div className='my-4' style={{display: 'flex', justifyContent: 'center'}}>
-  <img style={{width: 300}} src="https://thumbs.dreamstime.com/b/businessman-using-tablet-laptop-analyzing-sales-data-economic-growth-graph-chart-business-strategy-digital-marketing-154742021.jpg" alt="" />
+  <img style={{width: 300,}} src="https://thumbs.dreamstime.com/b/businessman-using-tablet-laptop-analyzing-sales-data-economic-growth-graph-chart-business-strategy-digital-marketing-154742021.jpg" alt="" />
  </div>
  <p style={{width: '70%', margin: 'auto'}}>
   Easy-to-Use Interface: We understand that not everyone has design expertise, which is why we've developed a user-friendly interface that allows anyone to create a beautiful business card in minutes. No complicated software or graphic design skills required!
@@ -43,9 +47,11 @@ Privacy and Security: We value your privacy and take it seriously. Rest assured 
 
 <div style={{display: 'flex', justifyContent: 'center', marginTop: 100}}>
   <Link to='/'>
-  <button className='btn btn-primary'>BAck to home page</button></Link>
+  <button className='btn btn-primary'>Back to home page</button></Link>
 </div>
+
  </div>
+
  </>
 )}
 

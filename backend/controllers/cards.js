@@ -16,7 +16,7 @@ module.exports = {
       const scheme = joi.object({
         title: joi.string().required().min(2).max(30),
         subtitle: joi.string().required().min(2).max(30),
-        description: joi.string().required().min(5).max(3000),
+        description: joi.string().required(),
         phone: joi.string().required().min(6).max(250),
         email: joi.string().max(150).required().email(),
         web: joi.string().optional().allow(""),

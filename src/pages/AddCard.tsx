@@ -126,7 +126,7 @@ toast.success('Card added successfully.')
                   placeholder="Title"
                 />
                 <label htmlFor="floatingInput">
-                  <span className="input-text text-dark">Title:</span>
+                  <span className="input-text text-dark">Title *</span>
                 </label>
               </div>
 

@@ -131,7 +131,7 @@ const Navbar = () => {
 
             )} */}
             <form className="d-flex" role="search">
-             <Search>
+             <Search >
                   <SearchIconWrapper>
                    <i className="bi bi-search"/>
                   </SearchIconWrapper>
@@ -143,11 +143,21 @@ const Navbar = () => {
                     inputProps={{ "aria-label": "search" }}
                   />
                 </Search>
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
                 {verifyToken() && (
                   <>
                     <li className="nav-item">
                       <Logout />
+                    </li>
+
+                     <li className="nav-item ">
+                      <NavLink
+                        className="nav-link "
+                        aria-current="page"
+                        to="/"
+                      >
+                        <i  className="bi bi-person-circle"/>
+                      </NavLink>
                     </li>
                   </>
                 )}
@@ -171,6 +181,8 @@ const Navbar = () => {
                         LOGIN
                       </NavLink>
                     </li>
+                    
+                   
                   </>
                 )}
               </ul>

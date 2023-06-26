@@ -48,7 +48,7 @@ setUsers(json)
       </thead>
 <tbody>
   {users.map(user=>(
-<tr>
+<tr key={user._id}>
     <td>{user._id}</td>
     <td>{JSON.stringify(user.admin)}</td>
     <td>{user.firstName}</td>
@@ -56,11 +56,14 @@ setUsers(json)
     <td>{user.phone}</td>
     <td>{JSON.stringify(user.business)}</td>
     {/* <td>{user.blocked}</td> */}
-    <td> <Link to={`/edituser/${user._id}`}>
+    <td> 
+      {!user.admin && ( <Link to={`/edituser/${user._id}`}>
     <button className="btn bt-light">
    <i className="bi bi-pen"/>
    </button>
-   </Link>
+   </Link>)}
+     
+
    {!user.admin && (
  <button onClick={()=>handleDelete(user._id as string)} className="btn bt-light">
    <i className="bi bi-trash2"/>

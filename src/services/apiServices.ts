@@ -34,6 +34,23 @@ export async function login(user: User): Promise<User> {
   return res.json();
 }
 
+export async function getUserById(_id: string): Promise<Array<User>> {
+  const res = await fetch(`${usersUrl}myuser/${_id}`);
+  return res.json();
+}
+
+export async function editUser(_id: string, user: User): Promise<User> {
+  const res = await fetch(`${usersUrl}${_id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      // 'x-auth-token': getToken()
+    },
+    body: JSON.stringify(user),
+  });
+  return res.json();
+}
+
 export async function deleteUser(_id: string): Promise<User> {
   const res = await fetch(`${usersUrl}${_id}`, {
     method: "DELETE",

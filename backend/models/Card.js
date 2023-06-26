@@ -18,8 +18,7 @@ const cardSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      minlength: [5, "Description must be at least 5 characters long."],
-      maxlength: [3000, "Max 3000 characters allowed."],
+     required: true
     },
     phone: {
       type: String,

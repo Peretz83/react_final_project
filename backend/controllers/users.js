@@ -185,6 +185,74 @@ module.exports = {
       res.status(400).json({ error: "error delete vacation" });
     }
   },
+  myUser: async function (req, res, next) {
+    try {
+      const scheme = joi.object({
+        _id: joi.string(),
+      });
+
+      const { error, value } = scheme.validate({ _id: req.params.id });
+      if (error) {
+        console.log(error.details[0].message);
+        res.status(400).json({ error: "invalid data" });
+        return;
+      }
+
+      const result = await User.find({ _id: value._id });
+
+      res.json(result);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: "error getting user" });
+    }
+  },
+  edit: async function (req, res, next) {
+    try {
+      const scheme = joi.object({
+        // admin: joi.boolean(),
+        firstName: joi.string().required().min(2).max(100),
+        middleName: joi.string().optional().allow(""),
+        lastName: joi.string().required().min(2).max(100),
+        phone: joi.string().required().min(6).max(250),
+        //   email: joi.string().max(150).required().email(),
+        //   password: joi.string().min(8).max(200).required(),
+        imageUrl: joi.string().optional().allow(""),
+        imageAlt: joi.string().optional().allow(""),
+        state: joi.string().optional().allow(""),
+        country: joi.string().required(),
+        city: joi.string().required(),
+        street: joi.string().required(),
+        houseNumber: joi.string().required(),
+        zip: joi.string().optional().allow(""),
+        business: joi.boolean(),
+        //   lat: joi.number(),
+        //   lng: joi.number(),
+      });
+
+      const { error, value } = scheme.validate(req.body);
+
+      if (error) {
+        console.log(error.details[0].message);
+        res.status(400).json({ error: "invalid data" });
+        return;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {
+          _id: req.params.id,
+        },
+        value
+      );
+
+      if (!user) return res.status(404).send("Given ID was not found.");
+
+      const updated = await User.findOne({ _id: req.params.id });
+      res.json(updated);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: "fail to update data" });
+    }
+  },
 
     
 }

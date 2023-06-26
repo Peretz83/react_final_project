@@ -50,13 +50,14 @@ if(user.err){
       } else {
         setUser(user)
          setToken(user.token);
-         setAdmin(JSON.stringify(user.admin))
+        //  setAdmin(JSON.stringify(user.admin))
         toast.success(`Welcome ${user.firstName}`);
         navigate("/");
         if (context) {
           context.setUserName(user.firstName);
           context.setAdmin(user.admin)
           context.setUser(user._id)
+          context.setBusiness(user.business)
         }
       }
     });
