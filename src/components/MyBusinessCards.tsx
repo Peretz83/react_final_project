@@ -43,7 +43,7 @@ const MyBusinessCards = ({ _id,
 
 <div key={_id} className="card m-4 bg-light" style={{width: '18rem',}}>
  <Link to={`/details/${cardId}`}>
-  <img style={{height: '200px'}} src={imageUrl} className="card-img-top min-h-25" alt={imageAlt}/>
+  <img style={{height: '200px'}} src={imageUrl? imageUrl : 'https://bcardextra.com/assets/images/products/45/bcardextra-digital-order-02.jpg'} className="card-img-top min-h-25" alt={imageAlt}/>
 
   <div className="card-body">
     <h5 className="card-title">{title}</h5>

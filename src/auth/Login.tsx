@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { FormEvent, useContext } from "react";
 import { useInputText } from "../hooks/useInputText";
 import FormLayout from "../components/FormLayout";
 import Title from "../components/Title";
 import { toast } from "react-toastify";
 import { login } from "../services/apiServices";
-import { setAdmin, setToken, setUser } from "./TokenManager";
+import {  setToken, setUser } from "./TokenManager";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
@@ -32,7 +32,8 @@ const Login = (props: Props) => {
     return true;
   }
 
-  function handleClick() {
+  function handleClick(e: FormEvent) {
+    e.preventDefault()
     if (!validate()) {
       return;
     }
@@ -52,7 +53,7 @@ if(user.err){
          setToken(user.token);
         //  setAdmin(JSON.stringify(user.admin))
         toast.success(`Welcome ${user.firstName}`);
-        navigate("/");
+        navigate("/")
         if (context) {
           context.setUserName(user.firstName);
           context.setAdmin(user.admin)
@@ -67,8 +68,9 @@ if(user.err){
     <>
       <div className="min-vw-100 min-vh-100 py-4 signupWrap">
         <Title mainText="LOGIN" />
-
+  <form onSubmit={handleClick}>
         <FormLayout>
+        
           <div className="d-flex flex-column align-items-center">
             <div className="form-floating mb-3 w-50 ">
               <input
@@ -99,13 +101,16 @@ if(user.err){
             <button
               className="w-30 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
               type="submit"
-              onClick={handleClick}
+              
             >
               LOGIN
             </button>
           </div>
-           <div className="text-center">Don't have an account? <Link to='/signup'>Sign-up here</Link></div>
+          
+          
+            <div className="text-center">Don't have an account? <Link to='/signup'>Sign-up here</Link></div>
         </FormLayout>
+         </form>
       </div>
     </>
   );

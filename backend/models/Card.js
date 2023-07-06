@@ -75,6 +75,16 @@ const cardSchema = new mongoose.Schema(
     userId: {
       type: String,
     },
+    favorites: [{
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User'
+    }],
+     lat: {
+      type: Number
+    },
+    lng: {
+      type: Number
+    },
   },
   { timestamps: true }
 );

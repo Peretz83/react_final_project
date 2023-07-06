@@ -20,4 +20,8 @@ export interface Card {
   updatedAt?: string;
   error?: string
   message?: string
+  lat?: number
+  lng?: number
+     favorites?: [] | null;
+   onToggleFavorite?: Function
 }

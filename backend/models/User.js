@@ -81,7 +81,12 @@ const userSchema = new mongoose.Schema(
     isBlocked: {
       type: Boolean,
       default: false
-    }
+    },
+    blockReleaseTime: {
+      type: Date,
+      default: null
+    },
+    favorites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Card'}],
   },
   { timestamps: true }
 );

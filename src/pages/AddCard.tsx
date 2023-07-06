@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect } from 'react'
+import React, { FormEvent, useContext, useEffect, useState } from 'react'
 import Title from '../components/Title'
 import FormLayout from '../components/FormLayout'
 import { useInputText } from '../hooks/useInputText'
@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 import { addCard } from '../services/apiServices'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../App'
+import { countryCoordinates } from '../interfaces/UserType'
+import { getUser } from '../auth/TokenManager'
 
 type Props = {}
 
@@ -20,19 +22,26 @@ const AddCard = (props: Props) => {
   const imageUrlProp = useInputText("");
   const imageAltProp = useInputText("");
   const stateProp = useInputText("");
-  const countryProp = useInputText("");
+  // const countryProp = useInputText("");
+   const [country, setCountry] = useState("");
   const cityProp = useInputText("");
   const streetProp = useInputText("");
   const houseNumberProp = useInputText("");
   const zipProp = useInputText("");
   const context = useContext(AppContext)
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
 
-  useEffect(()=>{
-if(context){
-  context.setUser(context.user)
+  const user = getUser()
+
+//   useEffect(()=>{
+// if(context){
+//   context.setUser(context.user)
   
-}
-  }, [])
+// }
+// console.log(context?.user);
+
+//   }, [])
 
   function validate(): boolean {
     if (!titleProp.value || titleProp.value.length < 2) {
@@ -58,7 +67,7 @@ if(context){
       toast.error("A valid email address is required.");
       return false;
     }
-    if (!countryProp.value) {
+    if (!country) {
       toast.error("Please select a country.");
       return false;
     }
@@ -91,12 +100,15 @@ e.preventDefault()
       imageUrl: imageUrlProp.value,
       imageAlt: imageAltProp.value,
       state: stateProp.value,
-      country: countryProp.value,
+      // country: countryProp.value,
+      country: country,
       city: cityProp.value,
       street: streetProp.value,
       houseNumber: houseNumberProp.value,
       zip: zipProp.value,
-      userId: context?.user
+      userId: user._id,
+      lat: lat,
+      lng: lng
     }).then((user)=>{
       if(user.error){
         toast.error(user.error)
@@ -109,6 +121,16 @@ toast.success('Card added successfully.')
 
   }
 
+    const handleChange = (event: any) => {
+    setCountry(event.target.value);
+    let selectedCountry = event.target.value;
+    let result = countryCoordinates.filter(
+      (item) => item.name === selectedCountry
+    );
+
+    setLat(result[0].coordinates.latitude);
+    setLng(result[0].coordinates.longitude);
+  };
   return (
      <>
       <div className="min-vw-100 min-vh-100 py-4 signupWrap">
@@ -240,7 +262,18 @@ toast.success('Card added successfully.')
                 </label>
               </div>
 
-              <div className="form-floating mb-3  w-50">
+<div style={{width: '49.5%'}} className="form-group">
+    <label htmlFor="exampleFormControlSelect1">Select Country</label>
+    <select value={country}  onChange={handleChange} className="form-control" id="exampleFormControlSelect1">
+      {countryCoordinates.map((place)=>(
+
+  <option key={place.name}>{place.name}</option>
+      ))}
+    
+     
+    </select>
+  </div>
+              {/* <div className="form-floating mb-3  w-50">
                 <input
                   type="text"
                   {...countryProp}
@@ -251,7 +284,7 @@ toast.success('Card added successfully.')
                 <label htmlFor="floatingInput">
                   <span className="input-text text-dark">Country:</span>
                 </label>
-              </div>
+              </div> */}
             </div>
             <div className="d-flex ">
               <div className="form-floating mb-3 me-3 w-50">

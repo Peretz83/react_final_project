@@ -49,10 +49,13 @@ const Signup = (props: Props) => {
       return false;
     }
 
-    if (!passwordProp.value || passwordProp.value.length < 8) {
-      toast.error("Password must contain at least 8 characters.");
-      return false;
-    }
+  //  const passRegex =/^(?=.[A-Z])(?=.[a-z])(?=.\d.\d.\d.\d)(?=.[!@#$%^&()_\-+=?]).{8,}$/; //eslint-disable-line
+  //   if (!passwordProp.value || !passRegex.test(passwordProp.value)) {
+  //     toast.error(
+  //       "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 4 numbers and 1 special character."
+  //     );
+  //     return false;
+  //   }
     if (!countryProp.value) {
       toast.error("Please select a country.");
       return false;
@@ -94,7 +97,6 @@ const Signup = (props: Props) => {
       zip: zipProp.value,
       business,
     }).then((newUser) => {
-      console.log(newUser);
       if (newUser.error) {
         toast.error(newUser.error);
       } else {

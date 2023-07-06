@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { removeToken } from "../auth/TokenManager";
+import { removeToken, removeUser } from "../auth/TokenManager";
 
 
 function Logout() {
@@ -7,6 +7,7 @@ function Logout() {
 
     function handleClick() {
         removeToken();
+        removeUser()
         // localStorage.removeItem('admin');
         navigate('/login');
     }

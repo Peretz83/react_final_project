@@ -7,7 +7,9 @@ const config = require('../config/dev');
 
 
 
-
+const signToken = (_id)=>{
+  return jwt.sign({_id}, config.jwt_token, {expiresIn: "72800s"})
+}
 
 module.exports = {
     allUsers: async function (req, res, next) {
@@ -101,67 +103,65 @@ module.exports = {
         }
     },
     login: async function (req, res, next) {
+    const schema = joi.object({
+      email: joi.string().required().max(150).email(),
+      password: joi.string().required().min(8).max(200),
+    });
 
-        const schema = joi.object({
-            email: joi.string().required().max(150).email(),
-            password: joi.string().required().min(8).max(200),
-        });
+    const { error, value } = schema.validate(req.body);
 
-        const { error, value } = schema.validate(req.body);
+    if (error) {
+      console.log(error.details[0].message);
+      res.status(401).send("Unauthorized");
+      return;
+    }
 
-        if (error) {
-            console.log(error.details[0].message);
-            res.status(401).send('Unauthorized');
-            return;
-        }
+    try {
+      const user = await User.findOne({ email: value.email });
+      if (!user) throw Error;
 
-        try {
-            const user = await User.findOne({ email: value.email });
-            if (!user) throw Error;
+      if (user.loginAttempts >= 2) {
+        user.isBlocked = true;
+        user.blockReleaseTime = new Date(Date.now() + 24 * 60 * 60 * 1000)
+        await user.save();
+      }
 
-            if(user.loginAttempts >=3){
-              user.isBlocked = true
-              await user.save()
-            }
+      if (user.isBlocked === true) {
+        throw "Account blocked";
+      }
 
-            if(user.isBlocked === true){
-              throw "Account blocked."
-            }
+      const validPassword = await bcrypt.compare(value.password, user.password);
+      if (!validPassword) throw "Invalid login details";
 
-            const validPassword = await bcrypt.compare(value.password, user.password);
-            if (!validPassword) throw 'Invalid password';
+      user.loginAttempts = 0;
+      await user.save();
+      
+const token = signToken(user._id);
 
-              user.loginAttempts = 0
-              await user.save()
+      res.json({
+        token: token,
+        _id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        admin: user.admin,
+        business: user.business,
+        isBlocked: user.isBlocked,
+        favorites: user.favorites
+      });
+    } catch (err) {
+      const user = await User.findOne({ email: req.body.email });
 
-            const param = { email: value.email };
-            const token = jwt.sign(param, config.jwt_token, { expiresIn: '72800s' });
+      if (user == null) {
+        res.status(400).json({ error: "User doesnt exist." });
+      }
 
-            res.json({
-                token: token,
-                _id: user._id,
-                email: user.email,
-                firstName: user.firstName,
-                admin: user.admin,
-                business: user.business
-            });
-        }
-        catch (err) {
-
-          const user = await User.findOne({email: req.body.email})
-
-          if (user == null){
-            res.status(400).json({error: 'User doesnt exist'})
-          }
-
-          if(user){
-            user.loginAttempts +=1
-            await user.save()
-            res.status(400).json({error: "Login detials do not match", err})
-          }
-         
-        }
-    },
+      if (user) {
+        user.loginAttempts += 1;
+        await user.save();
+        res.status(400).json({ error: "Log in details do not match", err });
+      }
+    }
+  },
     delete: async function (req, res, next) {
     try {
       const scheme = joi.object({

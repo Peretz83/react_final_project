@@ -2,11 +2,12 @@
 import { Link } from "react-router-dom";
 import Title from "../components/Title";
 import { getUser } from "../auth/TokenManager";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { deleteCard, getCardsById } from "../services/apiServices";
 import { Card } from "../interfaces/CardType";
 import MyBusinessCards from "../components/MyBusinessCards";
 import { toast } from "react-toastify";
+import { SearchContext } from "../hooks/SearContext";
 
 export interface CardContentType {
   onDelete: Function;
@@ -16,14 +17,27 @@ export const CardContext = createContext<CardContentType | null>(null);
 
 const MyCard = () => {
   const [myCards, setMyCards]=useState<Array<Card>>([])
+    const [filteredData, setFilteredData] = useState<Array<Card>>([]);
+   const { searchValue } = useContext(SearchContext);
 
  const user = getUser()
 
 useEffect(()=>{
-getCardsById(user._id as string).then((json)=>{
+  
+getCardsById(user._id).then((json)=>{
+  
 setMyCards(json)
 })
-}, [])
+}, [user._id])
+
+  useEffect(() => {
+    const filtered = myCards.filter(
+      (item) =>
+        item.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredData(filtered);
+  }, [searchValue, myCards]);
 
 async function onDelete(_id: string) {
     await deleteCard(_id);

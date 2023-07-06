@@ -28,25 +28,23 @@ const EditUser = (props: Props) => {
   useEffect(()=>{
 if(!id) return
 getUserById(id).then((json)=>{
-console.log(json);
-console.log(JSON.stringify(json[0].firstName));
 
-setFirstName((json[0].firstName as string))
-setMiddleName((json[0].middleName as string))
-setLastName((json[0].lastName as string))
-// setEmail((json[0].email as string))
-// setPassword((json[0].password as string))
-setPhone((json[0].phone as string))
-setImageUrl((json[0].imageUrl as string))
-setImageAlt((json[0].imageAlt as string))
-setState((json[0].state as string))
-setCountry((json[0].country as string))
-setCity((json[0].city as string))
-setStreet((json[0].street as string))
-setHouseNumber((json[0].houseNumber as string))
-setZip((json[0].zip as string))
+ setFirstName(json[0].firstName as string);
+      setMiddleName(json[0].middleName as string);
+      setLastName(json[0].lastName as string);
+      // setEmail((json[0].email as string))
+      // setPassword((json[0].password as string))
+      setPhone(json[0].phone as string);
+      setImageUrl(json[0].imageUrl as string);
+      setImageAlt(json[0].imageAlt as string);
+      setState(json[0].state as string);
+      setCountry(json[0].country as string);
+      setCity(json[0].city as string);
+      setStreet(json[0].street as string);
+      setHouseNumber(json[0].houseNumber as string);
+      setZip(json[0].zip as string);
 })
-  }, [])
+  },[id] )
 
    function handleSubmit( ) {
 //  if (!validate()) {

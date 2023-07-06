@@ -61,8 +61,33 @@ export async function deleteUser(_id: string): Promise<User> {
   return res.json();
 }
 
+
+
+
+
 export async function getCards(): Promise<Array<Card>> {
   const res = await fetch(`${cardsUrl}`);
+  return res.json();
+}
+
+export async function getFavorites(): Promise<Array<Card>> {
+  const res = await fetch(`${cardsUrl}favs`, {
+    headers: {
+      'x-auth-token': getToken()
+    }
+  });
+  return res.json();
+}
+
+export async function setFavorites(id: string): Promise<Card> {
+  const res = await fetch(`${cardsUrl}${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      'x-auth-token': getToken()
+    },
+    // body: JSON.stringify(id),
+  });
   return res.json();
 }
 

@@ -1,4 +1,5 @@
 const Card = require("../models/Card");
+const User = require("../models/User");
 const joi = require("joi");
 
 module.exports = {
@@ -29,7 +30,9 @@ module.exports = {
         houseNumber: joi.string().required(),
         zip: joi.string().optional().allow(""),
         cardNumber: joi.number(),
-        userId: joi.string().optional().allow("")
+        userId: joi.string().optional().allow(""),
+        lat: joi.number(),
+        lng: joi.number()
 
       });
 
@@ -163,6 +166,68 @@ module.exports = {
     } catch (err) {
       console.log(err);
       res.status(400).json({ error: "error delete vacation" });
+    }
+  },
+  getUserFavoriteCards: async function (req, res, next) {
+    try {
+      // console.log(req.user);
+      const user = await User.findById(req.user._id).populate('favorites');
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      
+      const favoriteCards = user.favorites
+
+      return res.status(200).json( favoriteCards );
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: "fail",
+        message: err.message,
+      });
+    }
+  },
+  setFavorite: async function (req, res, next) {
+    const cardId = req.params.id;
+    const userId = req.user._id;
+    let status = false;
+// console.log(req.user.id);
+    try {
+      const card = await Card.findById(cardId);
+      const user = await User.findById(userId);
+      if (!card) {
+        return res.status(404).json({ message: "Card not found" });
+      }
+
+      const cardIndex = card.favorites.indexOf(userId);
+      const userIndex = user.favorites.indexOf(cardId);
+
+      if (cardIndex === -1) {
+        card.favorites.push(userId);
+        status = true;
+      } else {
+        card.favorites.splice(cardIndex, 1);
+        status = false;
+      }
+
+      if (userIndex === -1) {
+        user.favorites.push(cardId);
+      } else {
+        user.favorites.splice(userIndex, 1);
+      }
+
+      await card.save();
+      await user.save();
+      const { title } = card;
+
+      return res.status(200).json({ title, status });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: "fail",
+        message: err.message,
+      });
     }
   },
 };

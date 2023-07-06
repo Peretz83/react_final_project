@@ -18,6 +18,11 @@ import CardDetails from "./pages/CardDetails";
 import EditCard from "./pages/EditCard";
 import EditUser from "./pages/EditUser";
 import { getUser } from "./auth/TokenManager";
+import Profile from "./pages/Profile";
+import { PaletteMode } from "@mui/material";
+import { amber, blue, deepOrange, grey } from "@mui/material/colors";
+import React from "react";
+import RouteGuard from "./auth/RouteGuard";
 
 export interface UserContext {
   userName: string;
@@ -34,8 +39,45 @@ export const AppContext = createContext<UserContext | null>(null);
 
 const userData = getUser()
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+const getDesignTokens = (mode: PaletteMode) => ({
+  palette: {
+    mode,
+    ...(mode === 'light'
+      ? {
+          // palette values for light mode
+          primary: blue,
+          divider: amber[200],
+          text: {
+            primary: grey[900],
+            secondary: grey[800],
+          },
+           background: {
+            default: blue[100],
+            paper: deepOrange[900],
+          },
+        }
+      : {
+          // palette values for dark mode
+          primary: grey,
+          divider: deepOrange[700],
+          background: {
+            default: grey[800],
+            paper: deepOrange[900],
+          },
+          text: {
+            primary: '#fff',
+            secondary: grey[500],
+          },
+        }),
+  },
+});
+
+
 function App() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
+  // const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mode, setMode] = React.useState<PaletteMode>('light');
   const [userName, setUserName] = useState(
     userData ? userData.firstName : 'user'
   );
@@ -43,15 +85,28 @@ function App() {
   const [admin, setAdmin] = useState(userData? userData.admin: false);
   const [user, setUser] = useState();
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode]
+  // const theme = useMemo(
+  //   () =>
+  //     createTheme({
+  //       palette: {
+  //         mode,
+  //       },
+  //     }),
+  //   [mode]
+  // );
+  const colorMode = React.useMemo(
+    () => ({
+      // The dark mode switch would invoke this method
+      toggleColorMode: () => {
+        setMode((prevMode: PaletteMode) =>
+          prevMode === 'light' ? 'dark' : 'light',
+        );
+      },
+    }),
+    [],
   );
+
+const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   function handleModeClick() {
     const toggleMode = mode === "dark" ? "light" : "dark";
@@ -60,11 +115,12 @@ function App() {
 
   return (
     <>
+    <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppContext.Provider value={{ userName, setUserName, admin, setAdmin, user, setUser, business, setBusiness }}>
          
-          <div className="app">
+          <div  className="app">
             <Navbar />
 
             <div className="modeWrap">
@@ -87,9 +143,14 @@ function App() {
               <Route path="mycards" element={<MyCards />} />
               <Route path="sandbox" element={<Sandbox />} />
               <Route path="signup" element={<Signup />} />
-              <Route path="login" element={<Login />} />
+              <Route path='login'  element={<Login />} />
               <Route path="addCard" element={<AddCard />} />
-              <Route path="details/:id" element={<CardDetails />} />
+              <Route path="profile/:id" element={<Profile />} />
+              <Route path="details/:id" element={
+              <RouteGuard>
+              <CardDetails />
+              </RouteGuard>
+              } />
               <Route path="editcard/:id" element={<EditCard />} />
               <Route path="edituser/:id" element={<EditUser />} />
             </Routes>
@@ -97,6 +158,7 @@ function App() {
           </div>
         </AppContext.Provider>
       </ThemeProvider>
+      </ColorModeContext.Provider>
     </>
   );
 }

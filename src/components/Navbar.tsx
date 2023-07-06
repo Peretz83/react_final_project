@@ -13,7 +13,7 @@ const user = getUser()
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.4),
+  backgroundColor: alpha(theme.palette.common.white, 0.8),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 1),
   },
@@ -48,11 +48,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function cleanName(){
-  const userName = user
-  const trimmedName = userName.firstName?.charAt(0).toUpperCase() + userName.firstName?.slice(1)
-  return trimmedName
-}
+
 
 const Navbar = () => {
   
@@ -63,6 +59,7 @@ const Navbar = () => {
   };
 
   const context = useContext(AppContext);
+  
   return (
     <div className="navCont">
       <nav className="navbar navbar-expand-lg  myNavbar">
@@ -101,7 +98,7 @@ const Navbar = () => {
                   </>
                 )}
               </li>
-              {verifyToken() && (
+            {context?.business && (
 
 <li className="nav-item">
                 <NavLink
@@ -112,7 +109,11 @@ const Navbar = () => {
                   MY CARDS
                 </NavLink>
               </li>
-              )}
+            )}
+
+
+             
+              
               {context?.admin && (
  <li className="nav-item">
                 <NavLink
@@ -154,7 +155,7 @@ const Navbar = () => {
                       <NavLink
                         className="nav-link "
                         aria-current="page"
-                        to="/"
+                        to={`/profile/${context?.user}`}
                       >
                         <i  className="bi bi-person-circle"/>
                       </NavLink>

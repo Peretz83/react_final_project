@@ -3,6 +3,7 @@ import { User } from "../interfaces/UserType";
 const tokenKey = "token"
 const adminKey = "admin"
 const userKey = "user"
+export const thepamsecretyek = "AIzaSyDeRdfT5_5oVCkUqJL_lpV7-_sRbs0WmCA"
 
 export function setToken(tokenValue?: string) {
     if (!tokenValue) return;
